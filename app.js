@@ -114,6 +114,11 @@ const I18N = {
     notePrompt: 'Nota para',
     logAsked: 'preguntó por',
     logShowed: 'mostró carta',
+    logShowedCard: 'mostró',
+    lblShown: 'Qué carta mostró',
+    shownUnknown: 'No la vi',
+    shownHintKnown: 'Se marcará ✕ en la columna de {p}.',
+    shownHintUnknown: 'Se marcará ? para {p} en las tres cartas.',
     logNobody: 'Nadie mostró carta',
     playerMe: 'Yo'
   },
@@ -175,6 +180,11 @@ const I18N = {
     notePrompt: 'Note for',
     logAsked: 'asked about',
     logShowed: 'showed a card',
+    logShowedCard: 'showed',
+    lblShown: 'Which card was shown',
+    shownUnknown: 'Didn’t see it',
+    shownHintKnown: 'Marks ✕ in {p}’s column.',
+    shownHintUnknown: 'Marks ? for {p} on all three cards.',
     logNobody: 'Nobody showed a card',
     playerMe: 'Me'
   }
@@ -489,16 +499,38 @@ function cyclePlayerMark(itemId, idx) {
 
   const cycle = idx === 0 ? MY_CYCLE : OPPONENT_CYCLE;
   const next = cycle[(cycle.indexOf(pm[player] || 'none') + 1) % cycle.length];
-  if (next === 'none') delete pm[player];
-  else pm[player] = next;
-
-  // Only one player can hold a given card
-  if (next === 'has') {
-    state.players.forEach(p => { if (p !== player && pm[p] === 'has') delete pm[p]; });
-  }
+  setPlayerMark(itemId, player, next);
 
   renderAll();
   saveState();
+}
+
+function setPlayerMark(itemId, player, value) {
+  const mark = state.marks[itemId];
+  if (!mark.playerMarks) mark.playerMarks = {};
+  const pm = mark.playerMarks;
+  if (value === 'none') delete pm[player];
+  else pm[player] = value;
+
+  // Only one player can hold a given card
+  if (value === 'has') {
+    state.players.forEach(p => { if (p !== player && pm[p] === 'has') delete pm[p]; });
+  }
+}
+
+// A logged turn where `responder` showed a card: if we saw which one, they hold it;
+// otherwise they might hold any of the three (unless it's already known)
+function applyShownCard(responder, shownId, cardIds) {
+  if (!state.players.includes(responder)) return;
+  pushHistory();
+  if (shownId) {
+    setPlayerMark(shownId, responder, 'has');
+    return;
+  }
+  cardIds.forEach(id => {
+    const current = state.marks[id].playerMarks?.[responder];
+    if (!current && !holderOf(id)) setPlayerMark(id, responder, 'maybe');
+  });
 }
 
 function togglePick(cat, itemId) {
@@ -540,6 +572,32 @@ function populateLogSelects() {
     select.innerHTML = GAME_DATA[cat].map(i => `<option value="${i.id}">${escapeHtml(nameOf(i))}</option>`).join('');
     if (state.rumor[cat]) select.value = state.rumor[cat];
   });
+  updateShownSelect();
+}
+
+// "What did they show?" only applies when someone showed a card; its options are the three asked cards
+function updateShownSelect() {
+  const responder = document.getElementById('log-responder').value;
+  const shown = document.getElementById('log-shown');
+  const previous = shown.value;
+  document.getElementById('log-shown-wrap').classList.toggle('hidden', !responder);
+
+  shown.innerHTML = `<option value="">${t('shownUnknown')}</option>` + CATEGORIES.map(cat => {
+    const item = findItem(cat, document.getElementById(`log-${cat}`).value);
+    return `<option value="${item.id}">${escapeHtml(nameOf(item))}</option>`;
+  }).join('');
+  if ([...shown.options].some(o => o.value === previous)) shown.value = previous;
+
+  const hint = document.getElementById('log-shown-hint');
+  hint.classList.toggle('hidden', !responder);
+  hint.textContent = !responder ? '' :
+    (shown.value ? t('shownHintKnown') : t('shownHintUnknown')).replace('{p}', responder)
+      .replace('✕', responder === state.players[0] ? '✓' : '✕');
+}
+
+// Card ids asked in the log form
+function loggedCardIds() {
+  return CATEGORIES.map(cat => document.getElementById(`log-${cat}`).value);
 }
 
 function openLogModal() {
@@ -774,12 +832,19 @@ function setupEventListeners() {
     e.preventDefault();
     const asker = document.getElementById('log-asker').value;
     const responder = document.getElementById('log-responder').value;
+    const shownId = responder ? document.getElementById('log-shown').value : '';
     const result = document.getElementById('log-result').value.trim();
-    const cards = CATEGORIES.map(cat => nameOf(findItem(cat, document.getElementById(`log-${cat}`).value)));
+    const cardIds = loggedCardIds();
+    const cards = CATEGORIES.map((cat, i) => nameOf(findItem(cat, cardIds[i])));
 
     let text = `${asker} ${t('logAsked')} ${cards.join(', ')}. `;
-    text += responder ? `${responder} ${t('logShowed')}.` : `${t('logNobody')}.`;
+    if (!responder) text += `${t('logNobody')}.`;
+    else if (shownId) text += `${responder} ${t('logShowedCard')} ${cards[cardIds.indexOf(shownId)]}.`;
+    else text += `${responder} ${t('logShowed')}.`;
     if (result) text += ` (${result})`;
+
+    // Nobody showed: the grid stays as it is
+    if (responder) applyShownCard(responder, shownId, cardIds);
 
     const now = new Date();
     state.turnLogs.unshift({
@@ -795,6 +860,9 @@ function setupEventListeners() {
     saveState();
     sounds.playTap('stamp');
   });
+
+  ['log-responder', 'log-suspects', 'log-rooms', 'log-weapons', 'log-shown'].forEach(id =>
+    document.getElementById(id).addEventListener('change', updateShownSelect));
 
   document.getElementById('log-list').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-delete-log]');
