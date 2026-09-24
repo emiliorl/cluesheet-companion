@@ -2,305 +2,174 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Cluesheet Companion | Detective Board Game Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Hoja de Pistas</title>
   <meta name="description" content="Digital cluesheet companion for Clue / Cluedo detective board games. Offline-ready, mobile-friendly paperless tracker." />
-  <meta name="theme-color" content="#12161f" />
+  <meta name="theme-color" content="#f3eee3" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1b1815" media="(prefers-color-scheme: dark)" />
   <link rel="manifest" href="manifest.json" />
-  <!-- Google Fonts: Outfit & Cinzel for mystery detective styling -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- App Container -->
-  <div id="app" class="app-container">
-    
-    <!-- Top Header Bar -->
-    <header class="app-header">
-      <div class="header-main">
-        <div class="brand">
-          <span class="brand-icon">🔍</span>
-          <div>
-            <h1 class="brand-title" id="txt-app-title">Hoja de Pistas</h1>
-            <p class="brand-subtitle" id="txt-app-subtitle">Compañero Digital • Clue 2010</p>
-          </div>
-        </div>
-        
-        <div class="header-actions">
-          <!-- Privacy Shield Toggle -->
-          <button id="btn-privacy" class="icon-btn" title="Modo Privacidad (Anti-Espía)" aria-label="Privacy Shield">
-            <span class="btn-icon">👁️</span>
-          </button>
-          
-          <!-- Players Manager Toggle -->
-          <button id="btn-players" class="icon-btn" title="Gestionar Jugadores en Mesa" aria-label="Players">
-            <span class="btn-icon">👥</span>
-            <span id="players-badge" class="badge">1</span>
-          </button>
-          
-          <!-- Language Toggle -->
-          <button id="btn-lang" class="icon-btn text-badge" title="Cambiar Idioma / Switch Language">
-            <span id="lang-indicator">ES</span>
-          </button>
-          
-          <!-- New Game / Reset -->
-          <button id="btn-new-game" class="icon-btn danger" title="Nueva Partida" aria-label="New Game">
-            <span class="btn-icon">🔄</span>
-          </button>
-        </div>
-      </div>
+  <div id="app" class="app">
 
-      <!-- Deduction Progress Tracker / Accusation Meter -->
-      <div class="case-meter" id="case-meter">
-        <div class="meter-item" id="meter-suspects">
-          <span class="meter-label" id="lbl-meter-suspects">Sospechosos</span>
-          <span class="meter-count" id="count-suspects">6 / 6</span>
-        </div>
-        <div class="meter-divider"></div>
-        <div class="meter-item" id="meter-rooms">
-          <span class="meter-label" id="lbl-meter-rooms">Habitaciones</span>
-          <span class="meter-count" id="count-rooms">9 / 9</span>
-        </div>
-        <div class="meter-divider"></div>
-        <div class="meter-item" id="meter-weapons">
-          <span class="meter-label" id="lbl-meter-weapons">Armas</span>
-          <span class="meter-count" id="count-weapons">9 / 9</span>
-        </div>
-        <button id="btn-solve-case" class="btn-solve" title="Ver deducción final">
-          <span class="solve-icon">⚡</span> <span id="txt-btn-solve">Acusar</span>
+    <!-- Top bar -->
+    <header class="topbar">
+      <h1 class="wordmark"><span class="wm-prefix" data-i18n="appTitlePrefix">Hoja de </span><span data-i18n="appTitleMain">Pistas</span></h1>
+      <div class="top-actions">
+        <button id="btn-undo" class="icon-btn" data-i18n-title="btnUndo" title="Deshacer">
+          <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
         </button>
-      </div>
-
-      <!-- Quick Legend & Controls -->
-      <div class="legend-bar">
-        <div class="legend-title" id="txt-legend">Toca para marcar:</div>
-        <div class="legend-items">
-          <span class="legend-tag mark-none">⬜ <span class="tag-desc" id="txt-tag-none">Desconocido</span></span>
-          <span class="legend-tag mark-eliminated">❌ <span class="tag-desc" id="txt-tag-elim">Descartado</span></span>
-          <span class="legend-tag mark-hand">🖐️ <span class="tag-desc" id="txt-tag-hand">En Mi Mano</span></span>
-          <span class="legend-tag mark-envelope">👑 <span class="tag-desc" id="txt-tag-env">¡Sobre!</span></span>
-          <span class="legend-tag mark-question">❓ <span class="tag-desc" id="txt-tag-ques">Sospecha</span></span>
-        </div>
-        <button id="btn-undo" class="btn-undo" title="Deshacer último cambio">
-          <span>↩️</span> <span id="txt-undo">Deshacer</span>
+        <button id="btn-log" class="icon-btn" data-i18n-title="logTitle" title="Registro">
+          <svg viewBox="0 0 24 24"><path d="M6 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+          <span id="log-badge" class="badge hidden">0</span>
         </button>
+        <button id="btn-privacy" class="icon-btn" data-i18n-title="privacyTitle" title="Ocultar hoja">
+          <svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A9.8 9.8 0 0 1 12 5c5 0 8.5 4.5 9.5 7a13 13 0 0 1-2.6 3.8M6.6 6.6C4.4 8 3 10.2 2.5 12c1 2.5 4.5 7 9.5 7a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+        </button>
+        <button id="btn-settings" class="icon-btn" data-i18n-title="settingsTitle" title="Ajustes">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        </button>
+        <button id="btn-solve-case" class="btn-accuse" data-i18n="btnSolve">Acusar</button>
       </div>
     </header>
 
-    <!-- Main Cluesheet Body -->
-    <main class="sheet-content" id="sheet-content">
-      
-      <!-- Category 1: Sospechosos -->
-      <section class="sheet-section" id="section-suspects">
-        <div class="section-header">
-          <div class="section-title-wrap">
-            <span class="section-badge">👤</span>
-            <h2 class="section-title" id="title-suspects">SOSPECHOSOS</h2>
-          </div>
-          <span class="section-counter" id="badge-suspects">6 restantes</span>
-        </div>
-        <div class="table-container">
-          <table class="clue-table" id="table-suspects">
-            <thead id="thead-suspects">
-              <!-- Dynamically populated headers (Item Name + Players) -->
-            </thead>
-            <tbody id="tbody-suspects">
-              <!-- Dynamically populated suspect rows -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Category 2: Habitaciones -->
-      <section class="sheet-section" id="section-rooms">
-        <div class="section-header">
-          <div class="section-title-wrap">
-            <span class="section-badge">🚪</span>
-            <h2 class="section-title" id="title-rooms">HABITACIONES</h2>
-          </div>
-          <span class="section-counter" id="badge-rooms">9 restantes</span>
-        </div>
-        <div class="table-container">
-          <table class="clue-table" id="table-rooms">
-            <thead id="thead-rooms"></thead>
-            <tbody id="tbody-rooms"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Category 3: Armas -->
-      <section class="sheet-section" id="section-weapons">
-        <div class="section-header">
-          <div class="section-title-wrap">
-            <span class="section-badge">🔪</span>
-            <h2 class="section-title" id="title-weapons">ARMAS</h2>
-          </div>
-          <span class="section-counter" id="badge-weapons">9 restantes</span>
-        </div>
-        <div class="table-container">
-          <table class="clue-table" id="table-weapons">
-            <thead id="thead-weapons"></thead>
-            <tbody id="tbody-weapons"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Turn Log Section -->
-      <section class="sheet-section log-section">
-        <div class="section-header cursor-pointer" id="log-header-toggle">
-          <div class="section-title-wrap">
-            <span class="section-badge">📜</span>
-            <h2 class="section-title" id="title-turn-log">REGISTRO DE PREGUNTAS EN MESA</h2>
-          </div>
-          <button class="btn-small-ghost" id="btn-add-log">+ <span id="txt-btn-add-log">Anotar Turno</span></button>
-        </div>
-        <div class="log-container" id="log-container">
-          <div class="empty-log-msg" id="empty-log-msg">
-            No hay notas registradas. Usa el registro para anotar quién preguntó a quién y qué mostraron.
-          </div>
-          <ul class="log-list" id="log-list"></ul>
-        </div>
-      </section>
-
+    <!-- The sheet: all three categories on one screen -->
+    <main class="sheet" id="sheet">
+      <section class="cat" id="cat-suspects" data-cat="suspects"></section>
+      <section class="cat" id="cat-rooms" data-cat="rooms"></section>
+      <section class="cat" id="cat-weapons" data-cat="weapons"></section>
     </main>
 
-    <!-- Bottom Status Notification / Save State Indicator -->
-    <footer class="app-footer">
-      <div class="footer-status">
-        <span class="status-dot"></span>
-        <span id="save-status-text">Guardado automáticamente</span>
-      </div>
-      <div class="footer-actions">
-        <button id="btn-sound-toggle" class="btn-ghost-sm" title="Sonido al marcar">
-          <span id="sound-icon">🔊</span>
-        </button>
-        <button id="btn-quick-log" class="btn-ghost-sm" title="Añadir nota">
-          <span>📝</span> <span id="txt-footer-note">Nota</span>
-        </button>
+    <!-- Rumor bar -->
+    <footer class="rumor-bar">
+      <div class="legend" id="legend"></div>
+      <div class="rumor-row">
+        <div class="rumor-slots">
+          <button class="slot" data-slot="suspects"></button>
+          <button class="slot" data-slot="rooms"></button>
+          <button class="slot" data-slot="weapons"></button>
+        </div>
+        <button id="btn-rumor-log" class="btn-ink" data-i18n="btnLogRumor">Anotar</button>
       </div>
     </footer>
 
-    <!-- Anti-Peeking Privacy Shield Screen -->
+    <!-- Privacy shield -->
     <div id="privacy-shield" class="privacy-shield hidden">
-      <div class="privacy-shield-content">
-        <div class="privacy-icon">🕵️‍♂️</div>
-        <h3 id="txt-privacy-title">MODO CONFIDENCIAL ACTIVO</h3>
-        <p id="txt-privacy-desc">Tu hoja de detective está oculta para que nadie en la mesa pueda espiar tus pistas.</p>
-        <div class="shield-instruction">
-          <span class="pulse-indicator"></span>
-          <span id="txt-privacy-hold">Mantén pulsado para ver</span>
-        </div>
-        <button id="btn-disable-privacy" class="btn-primary-ghost">
-          <span id="txt-privacy-exit">Desactivar Modo Privacidad</span>
-        </button>
+      <div class="privacy-card">
+        <p class="eyebrow" data-i18n="privacyEyebrow">Confidencial</p>
+        <h3 data-i18n="privacyHeading">Hoja oculta</h3>
+        <p class="muted" data-i18n="privacyDesc">Nadie en la mesa puede ver tus pistas.</p>
+        <button class="btn-outline hold-to-peek" data-i18n="privacyHold">Mantén pulsado para ver</button>
+        <button id="btn-disable-privacy" class="btn-ink" data-i18n="privacyExit">Mostrar hoja</button>
       </div>
     </div>
 
-    <!-- Players Setup Modal -->
-    <div id="modal-players" class="modal-overlay hidden">
+    <!-- Settings modal -->
+    <div id="modal-settings" class="modal-overlay hidden">
       <div class="modal-card">
         <div class="modal-header">
-          <h3 class="modal-title" id="modal-players-title">👥 Jugadores en la Mesa</h3>
-          <button class="modal-close" data-close="modal-players">&times;</button>
+          <h3 data-i18n="settingsTitle">Ajustes</h3>
+          <button class="modal-close" data-close="modal-settings" aria-label="Cerrar">&times;</button>
         </div>
         <div class="modal-body">
-          <p class="modal-desc" id="modal-players-desc">
-            Configura los jugadores de tu partida. Cada jugador tendrá una columna en la tabla para marcar si tienen o no una carta.
-          </p>
-          <div class="player-input-row">
-            <input type="text" id="new-player-input" placeholder="Nombre del rival (ej. Carlos)" maxlength="12" />
-            <button id="btn-add-player" class="btn-primary">+</button>
+          <h4 data-i18n="playersTitle">Jugadores</h4>
+          <p class="muted small" data-i18n="playersDesc">Cada jugador, tú incluido, tiene su columna. En la tuya marca ✓ tus cartas; en la de los rivales ✕ si la tienen o ? si podrían tenerla.</p>
+          <form class="player-input-row" id="form-add-player">
+            <input type="text" id="new-player-input" maxlength="12" autocomplete="off" data-i18n-placeholder="playerPlaceholder" placeholder="Nombre" />
+            <button type="submit" class="btn-ink" data-i18n="btnAdd">Añadir</button>
+          </form>
+          <div class="players-list" id="players-list"></div>
+          <p class="muted small" id="players-limit"></p>
+
+          <div class="setting-row">
+            <span data-i18n="editionLabel">Versión</span>
+            <div class="segmented">
+              <button data-edition="standard" data-i18n="editionStandard">Estándar · 6</button>
+              <button data-edition="master" data-i18n="editionMaster">Master · 10</button>
+            </div>
           </div>
-          <div class="players-list" id="modal-players-list">
-            <!-- Player chips with remove buttons -->
+
+          <div class="setting-row">
+            <span data-i18n="languageLabel">Idioma</span>
+            <div class="segmented">
+              <button data-lang="es">ES</button>
+              <button data-lang="en">EN</button>
+            </div>
           </div>
+          <div class="setting-row">
+            <span data-i18n="soundLabel">Sonido al marcar</span>
+            <input type="checkbox" id="toggle-sound" class="switch" />
+          </div>
+          <div class="legend" id="legend-settings"></div>
+          <p class="muted small" data-i18n="noteHint">Mantén pulsado un nombre para añadirle una nota.</p>
         </div>
         <div class="modal-footer">
-          <button class="btn-primary" data-close="modal-players" id="btn-save-players">Listo</button>
+          <button class="btn-danger-outline" id="btn-new-game" data-i18n="btnNewGame">Nueva partida</button>
+          <button class="btn-ink" data-close="modal-settings" data-i18n="btnDone">Listo</button>
         </div>
       </div>
     </div>
 
-    <!-- Log Turn Modal -->
+    <!-- Log modal -->
     <div id="modal-log" class="modal-overlay hidden">
       <div class="modal-card">
         <div class="modal-header">
-          <h3 class="modal-title" id="modal-log-title">📜 Anotar Turno / Pregunta</h3>
-          <button class="modal-close" data-close="modal-log">&times;</button>
+          <h3 data-i18n="logTitle">Registro</h3>
+          <button class="modal-close" data-close="modal-log" aria-label="Cerrar">&times;</button>
         </div>
         <div class="modal-body">
           <form id="form-log">
-            <div class="form-group">
-              <label id="lbl-log-asker">¿Quién preguntó?</label>
-              <select id="log-asker" class="form-select" required></select>
+            <div class="form-grid">
+              <label><span data-i18n="lblAsker">Preguntó</span><select id="log-asker"></select></label>
+              <label><span data-i18n="lblResponder">Mostró carta</span><select id="log-responder"></select></label>
             </div>
-            <div class="form-group">
-              <label id="lbl-log-clues">Pistas consultadas (Sospechoso, Habitación, Arma):</label>
-              <div class="select-clues-grid">
-                <select id="log-suspect" class="form-select"></select>
-                <select id="log-room" class="form-select"></select>
-                <select id="log-weapon" class="form-select"></select>
-              </div>
+            <div class="form-grid three">
+              <label><span data-i18n="suspect">Sospechoso</span><select id="log-suspects"></select></label>
+              <label><span data-i18n="room">Habitación</span><select id="log-rooms"></select></label>
+              <label><span data-i18n="weapon">Arma</span><select id="log-weapons"></select></label>
             </div>
-            <div class="form-group">
-              <label id="lbl-log-responder">¿Quién respondió?</label>
-              <select id="log-responder" class="form-select" required></select>
-            </div>
-            <div class="form-group">
-              <label id="lbl-log-result">Resultado / Nota privada:</label>
-              <input type="text" id="log-result" placeholder="Ej. Me mostró carta / Nadie mostró" class="form-input" />
-            </div>
-            <button type="submit" class="btn-primary full-width" id="btn-submit-log">Guardar en Registro</button>
+            <label><span data-i18n="lblResult">Nota</span><input type="text" id="log-result" autocomplete="off" data-i18n-placeholder="resultPlaceholder" /></label>
+            <button type="submit" class="btn-ink full" data-i18n="btnSaveLog">Guardar en registro</button>
           </form>
+          <ul class="log-list" id="log-list"></ul>
+          <p class="muted small empty-log" id="empty-log" data-i18n="emptyLog">Aún no hay turnos anotados.</p>
         </div>
       </div>
     </div>
 
-    <!-- Accusation Modal -->
+    <!-- Accusation modal -->
     <div id="modal-accusation" class="modal-overlay hidden">
-      <div class="modal-card accusation-card">
+      <div class="modal-card">
         <div class="modal-header">
-          <h3 class="modal-title golden-title" id="modal-acc-title">🏆 Solución y Acusación</h3>
-          <button class="modal-close" data-close="modal-accusation">&times;</button>
+          <h3 data-i18n="accTitle">Acusación</h3>
+          <button class="modal-close" data-close="modal-accusation" aria-label="Cerrar">&times;</button>
         </div>
         <div class="modal-body">
-          <p id="modal-acc-desc">Basado en tus descartes, estos son los candidatos que permanecen sin eliminar en el sobre confidencial:</p>
-          <div class="acc-summary-box">
-            <div class="acc-category">
-              <div class="acc-cat-label" id="acc-lbl-who">👤 ASESINO (SOSPECHOSO)</div>
-              <div class="acc-candidate-list" id="acc-list-suspects"></div>
-            </div>
-            <div class="acc-category">
-              <div class="acc-cat-label" id="acc-lbl-where">🚪 LUGAR (HABITACIÓN)</div>
-              <div class="acc-candidate-list" id="acc-list-rooms"></div>
-            </div>
-            <div class="acc-category">
-              <div class="acc-cat-label" id="acc-lbl-what">🔪 ARMA</div>
-              <div class="acc-candidate-list" id="acc-list-weapons"></div>
-            </div>
-          </div>
+          <p class="muted small" data-i18n="accDesc">Candidatos que siguen sin descartar:</p>
+          <div class="acc-block"><h4 data-i18n="accWho">Quién</h4><div class="acc-list" id="acc-list-suspects"></div></div>
+          <div class="acc-block"><h4 data-i18n="accWhere">Dónde</h4><div class="acc-list" id="acc-list-rooms"></div></div>
+          <div class="acc-block"><h4 data-i18n="accWhat">Con qué</h4><div class="acc-list" id="acc-list-weapons"></div></div>
         </div>
         <div class="modal-footer">
-          <button class="btn-primary" data-close="modal-accusation" id="btn-close-acc">Cerrar</button>
+          <button class="btn-ink" data-close="modal-accusation" data-i18n="btnClose">Cerrar</button>
         </div>
       </div>
     </div>
 
-    <!-- Confirm Reset Modal -->
+    <!-- Confirm reset modal -->
     <div id="modal-reset" class="modal-overlay hidden">
-      <div class="modal-card danger-card">
+      <div class="modal-card">
         <div class="modal-header">
-          <h3 class="modal-title" id="modal-reset-title">⚠️ Nueva Partida</h3>
-          <button class="modal-close" data-close="modal-reset">&times;</button>
+          <h3 data-i18n="btnNewGame">Nueva partida</h3>
+          <button class="modal-close" data-close="modal-reset" aria-label="Cerrar">&times;</button>
         </div>
         <div class="modal-body">
-          <p id="modal-reset-desc">¿Estás seguro de que quieres borrar toda la hoja y empezar una nueva partida? Esta acción no se puede deshacer.</p>
+          <p data-i18n="confirmReset">¿Borrar toda la hoja y empezar de nuevo? No se puede deshacer.</p>
         </div>
         <div class="modal-footer">
-          <button class="btn-secondary" data-close="modal-reset" id="btn-cancel-reset">Cancelar</button>
-          <button class="btn-danger" id="btn-confirm-reset">Sí, Borrar Todo</button>
+          <button class="btn-outline" data-close="modal-reset" data-i18n="btnCancel">Cancelar</button>
+          <button class="btn-danger" id="btn-confirm-reset" data-i18n="btnConfirmReset">Sí, borrar</button>
         </div>
       </div>
     </div>

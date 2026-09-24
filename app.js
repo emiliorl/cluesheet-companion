@@ -6,94 +6,177 @@
 // --- 1. Game Data & Translations ---
 const GAME_DATA = {
   suspects: [
-    { id: 'entrenador_mostaza', es: 'Entrenador Mostaza', en: 'Coach Mustard', icon: '🟡' },
-    { id: 'profesor_moradillo', es: 'Profesor Moradillo', en: 'Professor Plum', icon: '🟣' },
-    { id: 'sr_verdi', es: 'Sr. Verdi', en: 'Mr. Green', icon: '🟢' },
-    { id: 'sra_azulino', es: 'Sra. Azulino', en: 'Mrs. Peacock', icon: '🔵' },
-    { id: 'srita_escarlata', es: 'Srita. Escarlata', en: 'Miss Scarlet', icon: '🔴' },
-    { id: 'sra_blanco', es: 'Sra. Blanco', en: 'Mrs. White', icon: '⚪' }
+    { id: 'entrenador_mostaza', es: 'Entrenador Mostaza', en: 'Coach Mustard', short: { es: 'Mostaza', en: 'Mustard' }, color: '#c9a227' },
+    { id: 'profesor_moradillo', es: 'Profesor Moradillo', en: 'Professor Plum', short: { es: 'Moradillo', en: 'Plum' }, color: '#6d3b6b' },
+    { id: 'sr_verdi', es: 'Sr. Verdi', en: 'Mr. Green', short: { es: 'Verdi', en: 'Green' }, color: '#3f6e3c' },
+    { id: 'sra_azulino', es: 'Sra. Azulino', en: 'Mrs. Peacock', short: { es: 'Azulino', en: 'Peacock' }, color: '#2c5282' },
+    { id: 'srita_escarlata', es: 'Srita. Escarlata', en: 'Miss Scarlet', short: { es: 'Escarlata', en: 'Scarlet' }, color: '#a3262a' },
+    { id: 'sra_blanco', es: 'Sra. Blanco', en: 'Mrs. White', short: { es: 'Blanco', en: 'White' }, color: '#f4f1ea' }
   ],
   rooms: [
-    { id: 'vestibulo', es: 'Vestíbulo', en: 'Hall', icon: '🏛️' },
-    { id: 'comedor', es: 'Comedor', en: 'Dining Room', icon: '🍷' },
-    { id: 'cocina', es: 'Cocina', en: 'Kitchen', icon: '🍳' },
-    { id: 'patio', es: 'Patio', en: 'Patio', icon: '🌿' },
-    { id: 'observatorio', es: 'Observatorio', en: 'Observatory', icon: '🔭' },
-    { id: 'teatro', es: 'Teatro', en: 'Theater', icon: '🎭' },
-    { id: 'sala', es: 'Sala', en: 'Living Room', icon: '🛋️' },
-    { id: 'spa', es: 'Spa', en: 'Spa', icon: '🧖' },
-    { id: 'habitacion_huespedes', es: 'Habitación de huéspedes', en: 'Guest House', icon: '🛏️' }
+    { id: 'vestibulo', es: 'Vestíbulo', en: 'Hall' },
+    { id: 'comedor', es: 'Comedor', en: 'Dining Room', short: { es: 'Comedor', en: 'Dining' } },
+    { id: 'cocina', es: 'Cocina', en: 'Kitchen' },
+    { id: 'patio', es: 'Patio', en: 'Patio' },
+    { id: 'observatorio', es: 'Observatorio', en: 'Observatory', short: { es: 'Observat.', en: 'Observat.' } },
+    { id: 'teatro', es: 'Teatro', en: 'Theater' },
+    { id: 'sala', es: 'Sala', en: 'Living Room', short: { es: 'Sala', en: 'Living' } },
+    { id: 'spa', es: 'Spa', en: 'Spa' },
+    { id: 'habitacion_huespedes', es: 'Habitación de huéspedes', en: 'Guest House', short: { es: 'Huéspedes', en: 'Guest House' } }
   ],
   weapons: [
-    { id: 'cuchillo', es: 'Cuchillo', en: 'Knife / Dagger', icon: '🔪' },
-    { id: 'candelabro', es: 'Candelabro', en: 'Candlestick', icon: '🕯️' },
-    { id: 'pistola', es: 'Pistola', en: 'Pistol / Revolver', icon: '🔫' },
-    { id: 'veneno', es: 'Veneno', en: 'Poison', icon: '🧪' },
-    { id: 'trofeo', es: 'Trofeo', en: 'Trophy', icon: '🏆' },
-    { id: 'cuerda', es: 'Cuerda', en: 'Rope', icon: '🪢' },
-    { id: 'bate', es: 'Bate', en: 'Bat', icon: '🏏' },
-    { id: 'hacha', es: 'Hacha', en: 'Axe', icon: '🪓' },
-    { id: 'pesas', es: 'Pesas', en: 'Dumbbell', icon: '🏋️' }
+    { id: 'cuchillo', es: 'Cuchillo', en: 'Knife' },
+    { id: 'candelabro', es: 'Candelabro', en: 'Candlestick', short: { es: 'Candelabro', en: 'Candle' } },
+    { id: 'pistola', es: 'Pistola', en: 'Pistol' },
+    { id: 'veneno', es: 'Veneno', en: 'Poison' },
+    { id: 'trofeo', es: 'Trofeo', en: 'Trophy' },
+    { id: 'cuerda', es: 'Cuerda', en: 'Rope' },
+    { id: 'bate', es: 'Bate', en: 'Bat' },
+    { id: 'hacha', es: 'Hacha', en: 'Axe' },
+    { id: 'pesas', es: 'Pesas', en: 'Dumbbell' }
   ]
 };
+const CATEGORIES = ['suspects', 'rooms', 'weapons'];
 
-const MARK_CYCLE = ['none', 'eliminated', 'hand', 'envelope', 'question'];
-const MARK_ICONS = {
-  none: '⬜',
-  eliminated: '❌',
-  hand: '🖐️',
-  envelope: '👑',
-  question: '❓'
+// Player columns (index 0 is me): 'has' = holds the card, 'maybe' = might hold it.
+// My column toggles ✓; opponents rotate ✕ (has it) → ? → blank.
+const MY_CYCLE = ['none', 'has'];
+const OPPONENT_CYCLE = ['none', 'has', 'maybe'];
+// Guess column, when no one is known to hold the card
+const GUESS_CYCLE = ['none', 'question', 'envelope'];
+
+const MAX_PLAYERS = { standard: 6, master: 10 };
+
+const MARK_SVG = {
+  none: '',
+  eliminated: '<svg class="m m-eliminated" viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15"/></svg>',
+  hand: '<svg class="m m-hand" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 5.5"/></svg>',
+  envelope: '<svg class="m m-envelope" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6"/></svg>',
+  question: '<span class="m m-question">?</span>'
 };
 
 const I18N = {
   es: {
-    appTitle: 'Hoja de Pistas',
-    appSubtitle: 'Compañero Digital • Clue 2010',
-    suspectsTitle: 'SOSPECHOSOS',
-    roomsTitle: 'HABITACIONES',
-    weaponsTitle: 'ARMAS',
-    turnLogTitle: 'REGISTRO DE PREGUNTAS EN MESA',
-    remaining: 'restantes',
-    readyToAccuse: '¡Listo para Acusar!',
+    appTitlePrefix: 'Hoja de ',
+    appTitleMain: 'Pistas',
+    suspectsTitle: 'Sospechosos',
+    roomsTitle: 'Habitaciones',
+    weaponsTitle: 'Armas',
+    suspect: 'Sospechoso',
+    room: 'Habitación',
+    weapon: 'Arma',
     btnSolve: 'Acusar',
     btnUndo: 'Deshacer',
-    btnNote: 'Nota',
-    btnAddLog: 'Anotar Turno',
-    savedAuto: 'Guardado automáticamente',
-    colItem: 'Elemento',
-    colStatus: 'Estado',
-    playerMe: 'Yo',
-    privacyTitle: 'MODO CONFIDENCIAL ACTIVO',
-    privacyDesc: 'Tu hoja de detective está oculta para que nadie en la mesa pueda espiar tus pistas.',
+    btnLogRumor: 'Anotar',
+    logTitle: 'Registro',
+    settingsTitle: 'Ajustes',
+    privacyTitle: 'Ocultar hoja',
+    privacyEyebrow: 'Confidencial',
+    privacyHeading: 'Hoja oculta',
+    privacyDesc: 'Nadie en la mesa puede ver tus pistas.',
     privacyHold: 'Mantén pulsado para ver',
-    privacyExit: 'Desactivar Modo Privacidad',
-    confirmReset: '¿Estás seguro de que quieres borrar toda la hoja y empezar una nueva partida?',
-    emptyLog: 'No hay notas registradas. Usa el registro para anotar quién preguntó a quién y qué mostraron.'
+    privacyExit: 'Mostrar hoja',
+    playersTitle: 'Jugadores',
+    playersDesc: 'Cada jugador, tú incluido, tiene su columna. En la tuya marca ✓ tus cartas; en la de los rivales ✕ si la tienen o ? si podrían tenerla.',
+    editionLabel: 'Versión',
+    editionStandard: 'Estándar · 6',
+    editionMaster: 'Master · 10',
+    maxPlayers: 'Máximo {n} jugadores en esta versión.',
+    editionTooMany: 'Quita jugadores para volver a la versión estándar (máx. 6).',
+    playerPlaceholder: 'Nombre del jugador',
+    btnAdd: 'Añadir',
+    languageLabel: 'Idioma',
+    soundLabel: 'Sonido al marcar',
+    noteHint: 'Toca nombres para armar tu rumor. Mantén pulsado un nombre para añadirle una nota.',
+    btnNewGame: 'Nueva partida',
+    btnDone: 'Listo',
+    lblAsker: 'Preguntó',
+    lblResponder: 'Mostró carta',
+    lblResult: 'Nota',
+    resultPlaceholder: 'Ej. me enseñó la Cuerda',
+    btnSaveLog: 'Guardar en registro',
+    emptyLog: 'Aún no hay turnos anotados.',
+    nobody: 'Nadie',
+    accTitle: 'Acusación',
+    accDesc: 'Candidatos que siguen sin descartar:',
+    accWho: 'Quién',
+    accWhere: 'Dónde',
+    accWhat: 'Con qué',
+    accNone: 'Ninguno',
+    btnClose: 'Cerrar',
+    confirmReset: '¿Borrar toda la hoja y empezar de nuevo? No se puede deshacer.',
+    btnCancel: 'Cancelar',
+    btnConfirmReset: 'Sí, borrar',
+    legendHand: 'la tengo',
+    legendElim: 'la tiene otro',
+    legendQues: 'quizás',
+    legendEnv: 'sobre',
+    notePrompt: 'Nota para',
+    logAsked: 'preguntó por',
+    logShowed: 'mostró carta',
+    logNobody: 'Nadie mostró carta',
+    playerMe: 'Yo'
   },
   en: {
-    appTitle: 'Cluesheet Companion',
-    appSubtitle: 'Digital Detective • Clue 2010',
-    suspectsTitle: 'SUSPECTS',
-    roomsTitle: 'ROOMS',
-    weaponsTitle: 'WEAPONS',
-    turnLogTitle: 'TABLE INQUIRY LOG',
-    remaining: 'remaining',
-    readyToAccuse: 'Ready to Accuse!',
+    appTitlePrefix: 'Detective ',
+    appTitleMain: 'Notes',
+    suspectsTitle: 'Suspects',
+    roomsTitle: 'Rooms',
+    weaponsTitle: 'Weapons',
+    suspect: 'Suspect',
+    room: 'Room',
+    weapon: 'Weapon',
     btnSolve: 'Accuse',
     btnUndo: 'Undo',
-    btnNote: 'Note',
-    btnAddLog: 'Log Turn',
-    savedAuto: 'Automatically saved',
-    colItem: 'Clue',
-    colStatus: 'Status',
-    playerMe: 'Me',
-    privacyTitle: 'CONFIDENTIAL PRIVACY SHIELD',
-    privacyDesc: 'Your cluesheet is concealed so table neighbors cannot peek at your deductions.',
-    privacyHold: 'Press & hold to reveal',
-    privacyExit: 'Exit Privacy Mode',
-    confirmReset: 'Are you sure you want to reset the cluesheet and start a new game?',
-    emptyLog: 'No notes logged yet. Use the inquiry log to record who questioned whom and what was revealed.'
+    btnLogRumor: 'Log',
+    logTitle: 'Log',
+    settingsTitle: 'Settings',
+    privacyTitle: 'Hide sheet',
+    privacyEyebrow: 'Confidential',
+    privacyHeading: 'Sheet hidden',
+    privacyDesc: 'Nobody at the table can see your clues.',
+    privacyHold: 'Press and hold to peek',
+    privacyExit: 'Show sheet',
+    playersTitle: 'Players',
+    playersDesc: 'Every player, you included, gets a column. Mark ✓ on your own cards; on opponents mark ✕ if they have it or ? if they might.',
+    editionLabel: 'Version',
+    editionStandard: 'Standard · 6',
+    editionMaster: 'Master · 10',
+    maxPlayers: 'Up to {n} players in this version.',
+    editionTooMany: 'Remove players to switch back to standard (max 6).',
+    playerPlaceholder: 'Player name',
+    btnAdd: 'Add',
+    languageLabel: 'Language',
+    soundLabel: 'Sound on tap',
+    noteHint: 'Tap names to build your rumor. Press and hold a name to add a note.',
+    btnNewGame: 'New game',
+    btnDone: 'Done',
+    lblAsker: 'Asked',
+    lblResponder: 'Showed a card',
+    lblResult: 'Note',
+    resultPlaceholder: 'e.g. showed me the Rope',
+    btnSaveLog: 'Save to log',
+    emptyLog: 'No turns logged yet.',
+    nobody: 'Nobody',
+    accTitle: 'Accusation',
+    accDesc: 'Candidates not yet ruled out:',
+    accWho: 'Who',
+    accWhere: 'Where',
+    accWhat: 'With what',
+    accNone: 'None',
+    btnClose: 'Close',
+    confirmReset: 'Erase the whole sheet and start over? This can’t be undone.',
+    btnCancel: 'Cancel',
+    btnConfirmReset: 'Yes, erase',
+    legendHand: 'mine',
+    legendElim: 'someone has it',
+    legendQues: 'maybe',
+    legendEnv: 'envelope',
+    notePrompt: 'Note for',
+    logAsked: 'asked about',
+    logShowed: 'showed a card',
+    logNobody: 'Nobody showed a card',
+    playerMe: 'Me'
   }
 };
 
@@ -103,12 +186,21 @@ const STORAGE_KEY = 'cluesheet_companion_state_v2';
 let state = {
   lang: 'es',
   soundEnabled: true,
-  privacyActive: false,
-  players: ['Yo'], // 'Yo' / 'Me' is default
-  marks: {}, // { [itemId]: { status: 'none', notes: '', playerMarks: { [player]: 'none' } } }
+  schema: 3,
+  edition: 'standard', // 'standard' (max 6 players) | 'master' (max 10)
+  players: ['Yo'], // players[0] is always me ('Yo' / 'Me')
+  // status is my manual guess (GUESS_CYCLE); playerMarks values are 'has' | 'maybe'
+  marks: {}, // { [itemId]: { status: 'none', notes: '', playerMarks: { [player]: 'has' } } }
   history: [], // For undo
-  turnLogs: [] // [ { id, timestamp, text } ]
+  turnLogs: [], // [ { id, time, text } ]
+  rumor: { suspects: null, rooms: null, weapons: null }
 };
+
+const t = (key) => I18N[state.lang][key] ?? key;
+const nameOf = (item) => item[state.lang] || item.es;
+const shortNameOf = (item) => (item.short && item.short[state.lang]) || nameOf(item);
+const maxPlayers = () => MAX_PLAYERS[state.edition] || MAX_PLAYERS.standard;
+const findItem = (cat, id) => GAME_DATA[cat].find(i => i.id === id);
 
 // --- 3. Audio & Haptics Feedback ---
 class SoundManager {
@@ -165,12 +257,7 @@ const sounds = new SoundManager();
 // --- 4. Persistence ---
 function saveState() {
   try {
-    const statusDot = document.querySelector('.status-dot');
-    if (statusDot) statusDot.classList.add('saving');
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    setTimeout(() => {
-      if (statusDot) statusDot.classList.remove('saving');
-    }, 300);
   } catch (e) {
     console.error('Failed to save state:', e);
   }
@@ -183,9 +270,10 @@ function loadState() {
       const loaded = JSON.parse(raw);
       state = { ...state, ...loaded };
       if (!state.players || state.players.length === 0) {
-        state.players = [state.lang === 'es' ? 'Yo' : 'Me'];
+        state.players = [t('playerMe')];
       }
-      return;
+      if (!state.rumor) state.rumor = { suspects: null, rooms: null, weapons: null };
+      if ((loaded.schema || 0) < 3) migrateMarks();
     }
   } catch (e) {
     console.error('Failed to load state:', e);
@@ -193,30 +281,45 @@ function loadState() {
   initDefaultMarks();
 }
 
-function initDefaultMarks() {
-  const allItems = [...GAME_DATA.suspects, ...GAME_DATA.rooms, ...GAME_DATA.weapons];
-  allItems.forEach(item => {
-    if (!state.marks[item.id]) {
-      state.marks[item.id] = {
-        status: 'none',
-        notes: '',
-        playerMarks: {}
-      };
+// Pre-v3 sheets: 'hand' in the main column meant my card; player columns used ✓/✕/? differently
+function migrateMarks() {
+  const me = state.players[0];
+  Object.values(state.marks).forEach(mark => {
+    const pm = {};
+    Object.entries(mark.playerMarks || {}).forEach(([p, v]) => {
+      if (v === 'hand') pm[p] = 'has';
+      else if (v === 'question') pm[p] = 'maybe';
+    });
+    if (mark.status === 'hand') {
+      pm[me] = 'has';
+      mark.status = 'none';
     }
+    mark.playerMarks = pm;
   });
+  if (state.players.length > MAX_PLAYERS.standard) state.edition = 'master';
+  state.players = state.players.slice(0, MAX_PLAYERS.master);
+  state.history = [];
+  state.schema = 3;
+}
+
+function initDefaultMarks() {
+  CATEGORIES.forEach(cat => GAME_DATA[cat].forEach(item => {
+    if (!state.marks[item.id]) {
+      state.marks[item.id] = { status: 'none', notes: '', playerMarks: {} };
+    }
+  }));
 }
 
 function pushHistory() {
-  // Keep last 15 actions
+  // Keep last 30 actions
   state.history.push(JSON.stringify(state.marks));
-  if (state.history.length > 15) state.history.shift();
+  if (state.history.length > 30) state.history.shift();
 }
 
 function undo() {
   if (state.history.length === 0) return;
-  const previousMarks = state.history.pop();
   try {
-    state.marks = JSON.parse(previousMarks);
+    state.marks = JSON.parse(state.history.pop());
     renderAll();
     saveState();
     sounds.playTap('click');
@@ -228,390 +331,437 @@ function undo() {
 // --- 5. UI Rendering ---
 function renderAll() {
   renderLanguageLabels();
-  renderTable('suspects', GAME_DATA.suspects);
-  renderTable('rooms', GAME_DATA.rooms);
-  renderTable('weapons', GAME_DATA.weapons);
-  updateMeter();
+  CATEGORIES.forEach(renderCategory);
+  updateLayout();
+  renderRumorBar();
+  updateCounts();
   renderLogList();
-  renderPlayersModalList();
-  populateLogSelects();
+  renderSettings();
+  document.getElementById('btn-undo').disabled = state.history.length === 0;
 }
 
 function renderLanguageLabels() {
-  const t = I18N[state.lang];
-  document.getElementById('txt-app-title').textContent = t.appTitle;
-  document.getElementById('txt-app-subtitle').textContent = t.appSubtitle;
-  document.getElementById('title-suspects').textContent = t.suspectsTitle;
-  document.getElementById('title-rooms').textContent = t.roomsTitle;
-  document.getElementById('title-weapons').textContent = t.weaponsTitle;
-  document.getElementById('title-turn-log').textContent = t.turnLogTitle;
-  document.getElementById('txt-undo').textContent = t.btnUndo;
-  document.getElementById('txt-footer-note').textContent = t.btnNote;
-  document.getElementById('txt-btn-add-log').textContent = t.btnAddLog;
-  document.getElementById('save-status-text').textContent = t.savedAuto;
-  document.getElementById('txt-privacy-title').textContent = t.privacyTitle;
-  document.getElementById('txt-privacy-desc').textContent = t.privacyDesc;
-  document.getElementById('txt-privacy-hold').textContent = t.privacyHold;
-  document.getElementById('txt-privacy-exit').textContent = t.privacyExit;
-  document.getElementById('lang-indicator').textContent = state.lang.toUpperCase();
-  document.getElementById('players-badge').textContent = state.players.length;
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+
+  const legend = `
+    <span>${MARK_SVG.hand} ${t('legendHand')}</span>
+    <span>${MARK_SVG.eliminated} ${t('legendElim')}</span>
+    <span>${MARK_SVG.question} ${t('legendQues')}</span>
+    <span>${MARK_SVG.envelope} ${t('legendEnv')}</span>`;
+  document.getElementById('legend').innerHTML = legend;
+  document.getElementById('legend-settings').innerHTML = legend;
 }
 
-function renderTable(categoryKey, items) {
-  const t = I18N[state.lang];
-  const thead = document.getElementById(`thead-${categoryKey}`);
-  const tbody = document.getElementById(`tbody-${categoryKey}`);
-  if (!thead || !tbody) return;
+// --- Deduction: the guess column follows the player notes ---
+function holderOf(itemId) {
+  const pm = state.marks[itemId]?.playerMarks || {};
+  return state.players.find(p => pm[p] === 'has') || null;
+}
 
-  // Render Table Header
-  let headerHtml = `
-    <tr>
-      <th class="col-item">${t.colItem}</th>
-      <th class="col-state">${t.colStatus}</th>
-  `;
+// 'eliminated' is a legacy manual cross from older saved games
+function isRuledOut(itemId) {
+  return !!holderOf(itemId) || state.marks[itemId]?.status === 'eliminated';
+}
 
-  // If more than 1 player, show opponent columns
-  if (state.players.length > 1) {
-    state.players.forEach(p => {
-      headerHtml += `<th class="col-player">${escapeHtml(p)}</th>`;
-    });
-  }
+function remaining(cat) {
+  return GAME_DATA[cat].filter(item => !isRuledOut(item.id));
+}
 
-  headerHtml += `</tr>`;
-  thead.innerHTML = headerHtml;
+// Returns { mark, auto }: auto marks come from the notes and can't be changed by hand
+function guessOf(cat, itemId) {
+  if (isRuledOut(itemId)) return { mark: 'eliminated', auto: true };
+  if (remaining(cat).length === 1) return { mark: 'envelope', auto: true };
+  return { mark: state.marks[itemId]?.status || 'none', auto: false };
+}
 
-  // Render Table Rows
-  let bodyHtml = '';
-  items.forEach(item => {
-    const itemData = state.marks[item.id] || { status: 'none', notes: '', playerMarks: {} };
-    const itemName = state.lang === 'es' ? item.es : item.en;
-    const isEliminated = itemData.status === 'eliminated' || itemData.status === 'hand';
-    const isEnvelope = itemData.status === 'envelope';
-    const isHand = itemData.status === 'hand';
+function playerMarkSvg(idx, value) {
+  if (value === 'has') return idx === 0 ? MARK_SVG.hand : MARK_SVG.eliminated;
+  if (value === 'maybe') return MARK_SVG.question;
+  return '';
+}
 
-    let rowClass = 'clue-row';
-    if (isEliminated) rowClass += ' is-eliminated';
-    if (isEnvelope) rowClass += ' is-envelope';
-    if (isHand) rowClass += ' is-hand';
+function cellWidth(cols) {
+  return cols <= 5 ? 36 : cols <= 7 ? 30 : 25;
+}
 
-    bodyHtml += `
-      <tr class="${rowClass}" data-item-id="${item.id}">
-        <td class="item-cell" onclick="handleItemClick('${item.id}')">
-          <div class="item-info">
-            <span class="item-name">${item.icon} ${itemName}</span>
-            ${itemData.notes ? `<span class="item-notes">📝 ${escapeHtml(itemData.notes)}</span>` : ''}
-          </div>
-          <button class="btn-note-indicator ${itemData.notes ? 'has-note' : ''}" 
-                  onclick="event.stopPropagation(); promptNote('${item.id}', '${escapeHtml(itemName)}')"
-                  title="Añadir nota">
-            ✏️
-          </button>
-        </td>
-        <td class="mark-cell">
-          <button class="mark-btn" data-mark="${itemData.status}" 
-                  onclick="event.stopPropagation(); cycleMark('${item.id}')"
-                  title="Cambiar estado">
-            ${MARK_ICONS[itemData.status] || '⬜'}
-          </button>
-        </td>
-    `;
+function renderCategory(cat) {
+  const section = document.getElementById(`cat-${cat}`);
+  const cols = 1 + state.players.length;
+  const dense = cols > 5;
+  section.style.setProperty('--cols', cols);
+  section.style.setProperty('--cell', `${cellWidth(cols)}px`);
+  section.classList.toggle('dense', dense);
+  const labelLen = cols > 7 ? 2 : 3;
 
-    // Opponent player cells
-    if (state.players.length > 1) {
-      state.players.forEach(p => {
-        const pMark = (itemData.playerMarks && itemData.playerMarks[p]) || 'none';
-        bodyHtml += `
-          <td class="mark-cell">
-            <button class="mark-btn" data-mark="${pMark}" 
-                    onclick="event.stopPropagation(); cyclePlayerMark('${item.id}', '${escapeHtml(p)}')">
-              ${MARK_ICONS[pMark] || '⬜'}
-            </button>
-          </td>
-        `;
-      });
-    }
+  let html = `
+    <div class="row cat-head">
+      <h2>${t(`${cat}Title`)}</h2>
+      <span class="col-label cat-count" id="count-${cat}"></span>
+      ${state.players.map(name =>
+        `<span class="col-label" title="${escapeHtml(name)}">${escapeHtml(name.slice(0, labelLen))}</span>`).join('')}
+    </div>`;
 
-    bodyHtml += `</tr>`;
+  GAME_DATA[cat].forEach(item => {
+    const data = state.marks[item.id] || { status: 'none', notes: '', playerMarks: {} };
+    const guess = guessOf(cat, item.id);
+    const cls = ['row', 'item'];
+    if (guess.mark === 'eliminated') cls.push('is-out');
+    if (guess.mark === 'envelope') cls.push('is-envelope');
+    if (state.rumor[cat] === item.id) cls.push('is-picked');
+
+    html += `
+      <div class="${cls.join(' ')}">
+        <button class="pick" data-act="pick" data-cat="${cat}" data-id="${item.id}">
+          ${item.color ? `<span class="swatch" style="background:${item.color}"></span>` : ''}
+          <span class="name">${escapeHtml(dense ? shortNameOf(item) : nameOf(item))}</span>
+          ${data.notes ? `<span class="note">${escapeHtml(data.notes)}</span>` : ''}
+        </button>
+        <button class="mark status ${guess.auto ? 'auto' : ''}" data-act="mark" data-cat="${cat}" data-id="${item.id}" aria-label="${guess.mark}">${MARK_SVG[guess.mark] || ''}</button>
+        ${state.players.map((name, idx) => {
+          const pm = (data.playerMarks && data.playerMarks[name]) || 'none';
+          return `<button class="mark" data-act="pmark" data-id="${item.id}" data-p="${idx}" aria-label="${escapeHtml(name)}: ${pm}">${playerMarkSvg(idx, pm)}</button>`;
+        }).join('')}
+      </div>`;
   });
 
-  tbody.innerHTML = bodyHtml;
+  section.innerHTML = html;
 }
 
-function updateMeter() {
-  const t = I18N[state.lang];
-  const countRemaining = (items) => {
-    return items.filter(item => {
-      const mark = state.marks[item.id]?.status;
-      return mark !== 'eliminated' && mark !== 'hand';
-    }).length;
-  };
+function updateCounts() {
+  let allSolved = true;
+  CATEGORIES.forEach(cat => {
+    const rem = remaining(cat).length;
+    const el = document.getElementById(`count-${cat}`);
+    el.textContent = `${rem}/${GAME_DATA[cat].length}`;
+    el.classList.toggle('solved', rem === 1);
+    if (rem !== 1) allSolved = false;
+  });
+  document.getElementById('btn-solve-case').classList.toggle('ready', allSolved);
+}
 
-  const remSuspects = countRemaining(GAME_DATA.suspects);
-  const remRooms = countRemaining(GAME_DATA.rooms);
-  const remWeapons = countRemaining(GAME_DATA.weapons);
+// Three categories side by side only while each one still fits all its columns
+function updateLayout() {
+  const cols = 1 + state.players.length;
+  const perCategory = (Math.min(window.innerWidth, 1100) - 88) / 3;
+  document.getElementById('sheet').classList.toggle('stacked', cols * cellWidth(cols) + 130 > perCategory);
+}
 
-  document.getElementById('count-suspects').textContent = `${remSuspects} / ${GAME_DATA.suspects.length}`;
-  document.getElementById('count-rooms').textContent = `${remRooms} / ${GAME_DATA.rooms.length}`;
-  document.getElementById('count-weapons').textContent = `${remWeapons} / ${GAME_DATA.weapons.length}`;
-
-  document.getElementById('badge-suspects').textContent = `${remSuspects} ${t.remaining}`;
-  document.getElementById('badge-rooms').textContent = `${remRooms} ${t.remaining}`;
-  document.getElementById('badge-weapons').textContent = `${remWeapons} ${t.remaining}`;
-
-  // Meter highlighting if solved to 1 remaining
-  const elSus = document.getElementById('count-suspects');
-  const elRoom = document.getElementById('count-rooms');
-  const elWeap = document.getElementById('count-weapons');
-  const btnSolve = document.getElementById('btn-solve-case');
-
-  remSuspects === 1 ? elSus.classList.add('solved') : elSus.classList.remove('solved');
-  remRooms === 1 ? elRoom.classList.add('solved') : elRoom.classList.remove('solved');
-  remWeapons === 1 ? elWeap.classList.add('solved') : elWeap.classList.remove('solved');
-
-  if (remSuspects === 1 && remRooms === 1 && remWeapons === 1) {
-    btnSolve.classList.add('ready');
-    document.getElementById('txt-btn-solve').textContent = t.readyToAccuse;
-  } else {
-    btnSolve.classList.remove('ready');
-    document.getElementById('txt-btn-solve').textContent = t.btnSolve;
-  }
+function renderRumorBar() {
+  const placeholders = { suspects: t('suspect'), rooms: t('room'), weapons: t('weapon') };
+  let any = false;
+  document.querySelectorAll('.slot').forEach(slot => {
+    const cat = slot.dataset.slot;
+    const item = state.rumor[cat] && findItem(cat, state.rumor[cat]);
+    slot.textContent = item ? nameOf(item) : placeholders[cat];
+    slot.classList.toggle('filled', !!item);
+    if (item) any = true;
+  });
+  document.getElementById('btn-rumor-log').disabled = !any;
 }
 
 // --- 6. Mark Actions ---
-window.cycleMark = function(itemId) {
+function cycleMark(cat, itemId) {
+  if (guessOf(cat, itemId).auto) return;
   pushHistory();
   sounds.vibrate(12);
   sounds.playTap('stamp');
 
-  if (!state.marks[itemId]) {
-    state.marks[itemId] = { status: 'none', notes: '', playerMarks: {} };
-  }
-
-  const current = state.marks[itemId].status || 'none';
-  const nextIdx = (MARK_CYCLE.indexOf(current) + 1) % MARK_CYCLE.length;
-  state.marks[itemId].status = MARK_CYCLE[nextIdx];
+  const mark = state.marks[itemId];
+  const nextIdx = (GUESS_CYCLE.indexOf(mark.status || 'none') + 1) % GUESS_CYCLE.length;
+  mark.status = GUESS_CYCLE[nextIdx];
 
   renderAll();
   saveState();
-};
+}
 
-window.cyclePlayerMark = function(itemId, player) {
+function cyclePlayerMark(itemId, idx) {
   pushHistory();
   sounds.vibrate(12);
   sounds.playTap('click');
 
-  if (!state.marks[itemId]) {
-    state.marks[itemId] = { status: 'none', notes: '', playerMarks: {} };
-  }
-  if (!state.marks[itemId].playerMarks) {
-    state.marks[itemId].playerMarks = {};
-  }
+  const player = state.players[idx];
+  const mark = state.marks[itemId];
+  if (!mark.playerMarks) mark.playerMarks = {};
+  const pm = mark.playerMarks;
 
-  const current = state.marks[itemId].playerMarks[player] || 'none';
-  const nextIdx = (MARK_CYCLE.indexOf(current) + 1) % MARK_CYCLE.length;
-  state.marks[itemId].playerMarks[player] = MARK_CYCLE[nextIdx];
+  const cycle = idx === 0 ? MY_CYCLE : OPPONENT_CYCLE;
+  const next = cycle[(cycle.indexOf(pm[player] || 'none') + 1) % cycle.length];
+  if (next === 'none') delete pm[player];
+  else pm[player] = next;
 
-  // If this player showed the card, it can't be in the envelope
-  if (MARK_CYCLE[nextIdx] === 'hand' || MARK_CYCLE[nextIdx] === 'eliminated') {
-    // If player has it, we know it's not in envelope
-    if (state.marks[itemId].status === 'none') {
-      state.marks[itemId].status = 'eliminated';
-    }
+  // Only one player can hold a given card
+  if (next === 'has') {
+    state.players.forEach(p => { if (p !== player && pm[p] === 'has') delete pm[p]; });
   }
 
   renderAll();
   saveState();
-};
+}
 
-window.handleItemClick = function(itemId) {
-  window.cycleMark(itemId);
-};
+function togglePick(cat, itemId) {
+  state.rumor[cat] = state.rumor[cat] === itemId ? null : itemId;
+  sounds.vibrate(8);
+  sounds.playTap('click');
+  renderAll();
+  saveState();
+}
 
-window.promptNote = function(itemId, itemName) {
+function promptNote(itemId) {
+  const item = CATEGORIES.map(cat => findItem(cat, itemId)).find(Boolean);
   const current = state.marks[itemId]?.notes || '';
-  const note = prompt(`Nota para ${itemName}:`, current);
+  const note = prompt(`${t('notePrompt')} ${nameOf(item)}:`, current);
   if (note !== null) {
     pushHistory();
-    if (!state.marks[itemId]) state.marks[itemId] = { status: 'none', notes: '', playerMarks: {} };
     state.marks[itemId].notes = note.trim();
     renderAll();
     saveState();
   }
-};
+}
 
 // --- 7. Modals & Turn Log ---
 function openModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.remove('hidden');
+  document.getElementById(id)?.classList.remove('hidden');
 }
 
 function closeModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.add('hidden');
+  document.getElementById(id)?.classList.add('hidden');
 }
 
 function populateLogSelects() {
-  const askerSelect = document.getElementById('log-asker');
-  const responderSelect = document.getElementById('log-responder');
-  const suspectSelect = document.getElementById('log-suspect');
-  const roomSelect = document.getElementById('log-room');
-  const weaponSelect = document.getElementById('log-weapon');
-
-  if (!askerSelect || !responderSelect) return;
-
   const playerOpts = state.players.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
-  askerSelect.innerHTML = playerOpts;
-  responderSelect.innerHTML = `<option value="Nadie">Nadie mostró carta</option>` + playerOpts;
+  document.getElementById('log-asker').innerHTML = playerOpts;
+  document.getElementById('log-responder').innerHTML = `<option value="">${t('nobody')}</option>` + playerOpts;
 
-  suspectSelect.innerHTML = GAME_DATA.suspects.map(s => 
-    `<option value="${state.lang === 'es' ? s.es : s.en}">${s.icon} ${state.lang === 'es' ? s.es : s.en}</option>`
-  ).join('');
+  CATEGORIES.forEach(cat => {
+    const select = document.getElementById(`log-${cat}`);
+    select.innerHTML = GAME_DATA[cat].map(i => `<option value="${i.id}">${escapeHtml(nameOf(i))}</option>`).join('');
+    if (state.rumor[cat]) select.value = state.rumor[cat];
+  });
+}
 
-  roomSelect.innerHTML = GAME_DATA.rooms.map(r => 
-    `<option value="${state.lang === 'es' ? r.es : r.en}">${r.icon} ${state.lang === 'es' ? r.es : r.en}</option>`
-  ).join('');
-
-  weaponSelect.innerHTML = GAME_DATA.weapons.map(w => 
-    `<option value="${state.lang === 'es' ? w.es : w.en}">${w.icon} ${state.lang === 'es' ? w.es : w.en}</option>`
-  ).join('');
+function openLogModal() {
+  populateLogSelects();
+  openModal('modal-log');
 }
 
 function renderLogList() {
   const list = document.getElementById('log-list');
-  const empty = document.getElementById('empty-log-msg');
-  if (!list || !empty) return;
+  document.getElementById('empty-log').classList.toggle('hidden', state.turnLogs.length > 0);
+  const badge = document.getElementById('log-badge');
+  badge.textContent = state.turnLogs.length;
+  badge.classList.toggle('hidden', state.turnLogs.length === 0);
 
-  if (state.turnLogs.length === 0) {
-    empty.style.display = 'block';
-    list.innerHTML = '';
-    return;
-  }
-
-  empty.style.display = 'none';
   list.innerHTML = state.turnLogs.map((log, index) => `
     <li class="log-entry">
-      <div>
-        <div class="log-entry-text">${escapeHtml(log.text)}</div>
-        <div class="log-entry-meta">${escapeHtml(log.time)}</div>
-      </div>
-      <button class="btn-delete-log" onclick="deleteLog(${index})" title="Borrar nota">&times;</button>
+      <div><span class="log-time">${escapeHtml(log.time)}</span>${escapeHtml(log.text)}</div>
+      <button data-delete-log="${index}" aria-label="Delete">&times;</button>
     </li>
   `).join('');
 }
 
-window.deleteLog = function(index) {
-  state.turnLogs.splice(index, 1);
-  renderLogList();
-  saveState();
-};
-
-function renderPlayersModalList() {
-  const container = document.getElementById('modal-players-list');
-  if (!container) return;
-
-  container.innerHTML = state.players.map((p, idx) => `
+function renderSettings() {
+  // I'm always players[0] and can't be removed
+  document.getElementById('players-list').innerHTML = state.players.map((p, idx) => `
     <span class="player-chip">
-      👤 ${escapeHtml(p)}
-      ${state.players.length > 1 ? `<button class="player-chip-remove" onclick="removePlayer(${idx})" title="Eliminar">&times;</button>` : ''}
+      ${escapeHtml(p)}
+      ${idx > 0 ? `<button data-remove-player="${idx}" aria-label="Remove">&times;</button>` : ''}
     </span>
   `).join('');
+
+  const full = state.players.length >= maxPlayers();
+  document.getElementById('new-player-input').disabled = full;
+  document.querySelector('#form-add-player button').disabled = full;
+  document.getElementById('players-limit').textContent =
+    `${state.players.length}/${maxPlayers()} · ${t('maxPlayers').replace('{n}', maxPlayers())}`;
+
+  const tooManyForStandard = state.players.length > MAX_PLAYERS.standard;
+  document.querySelectorAll('[data-edition]').forEach(b => {
+    b.classList.toggle('active', b.dataset.edition === state.edition);
+    b.disabled = b.dataset.edition === 'standard' && tooManyForStandard;
+    b.title = b.disabled ? t('editionTooMany') : '';
+  });
+  document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
+  document.getElementById('toggle-sound').checked = state.soundEnabled;
 }
 
-window.removePlayer = function(index) {
-  if (state.players.length <= 1) return;
-  state.players.splice(index, 1);
-  renderAll();
-  saveState();
-};
-
 function showAccusationModal() {
-  const getCandidates = (items) => {
-    return items.filter(item => {
-      const mark = state.marks[item.id]?.status;
-      return mark !== 'eliminated' && mark !== 'hand';
-    }).map(item => {
-      const isEnv = state.marks[item.id]?.status === 'envelope';
-      const name = state.lang === 'es' ? item.es : item.en;
-      return `<span class="candidate-tag ${isEnv ? 'winner' : ''}">${item.icon} ${name} ${isEnv ? '👑' : ''}</span>`;
+  CATEGORIES.forEach(cat => {
+    const tags = remaining(cat).map(item => {
+      const isEnv = guessOf(cat, item.id).mark === 'envelope';
+      return `<span class="acc-tag ${isEnv ? 'winner' : ''}">${escapeHtml(nameOf(item))}</span>`;
     });
-  };
-
-  const susList = getCandidates(GAME_DATA.suspects);
-  const roomList = getCandidates(GAME_DATA.rooms);
-  const weapList = getCandidates(GAME_DATA.weapons);
-
-  document.getElementById('acc-list-suspects').innerHTML = susList.length ? susList.join('') : '<em>Ninguno detectado</em>';
-  document.getElementById('acc-list-rooms').innerHTML = roomList.length ? roomList.join('') : '<em>Ninguno detectado</em>';
-  document.getElementById('acc-list-weapons').innerHTML = weapList.length ? weapList.join('') : '<em>Ninguno detectado</em>';
-
+    document.getElementById(`acc-list-${cat}`).innerHTML =
+      tags.length ? tags.join('') : `<span class="acc-none">${t('accNone')}</span>`;
+  });
   openModal('modal-accusation');
 }
 
 // --- 8. Event Listeners & Setup ---
+function setupSheetInteractions() {
+  const sheet = document.getElementById('sheet');
+  let pressTimer = null;
+  let longPressed = false;
+
+  // Long-press (or right-click) a name to edit its note
+  sheet.addEventListener('pointerdown', (e) => {
+    const pick = e.target.closest('[data-act="pick"]');
+    if (!pick) return;
+    longPressed = false;
+    clearTimeout(pressTimer);
+    pressTimer = setTimeout(() => {
+      longPressed = true;
+      sounds.vibrate(25);
+      promptNote(pick.dataset.id);
+    }, 550);
+  });
+  ['pointerup', 'pointerleave', 'pointercancel', 'scroll'].forEach(ev =>
+    sheet.addEventListener(ev, () => clearTimeout(pressTimer), true));
+  sheet.addEventListener('contextmenu', (e) => {
+    const pick = e.target.closest('[data-act="pick"]');
+    if (!pick) return;
+    e.preventDefault();
+    if (!longPressed) promptNote(pick.dataset.id);
+  });
+
+  sheet.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const { act, id } = btn.dataset;
+    if (act === 'pick') {
+      if (longPressed) { longPressed = false; return; }
+      togglePick(btn.dataset.cat, id);
+    } else if (act === 'mark') {
+      cycleMark(btn.dataset.cat, id);
+    } else if (act === 'pmark') {
+      cyclePlayerMark(id, Number(btn.dataset.p));
+    }
+  });
+}
+
 function setupEventListeners() {
+  setupSheetInteractions();
+
   // Privacy Shield
   const shield = document.getElementById('privacy-shield');
-  const btnPrivacy = document.getElementById('btn-privacy');
-  const btnDisablePrivacy = document.getElementById('btn-disable-privacy');
-
-  btnPrivacy.addEventListener('click', () => {
+  document.getElementById('btn-privacy').addEventListener('click', () => {
     shield.classList.remove('hidden');
     sounds.playTap('click');
   });
-
-  btnDisablePrivacy.addEventListener('click', () => {
+  document.getElementById('btn-disable-privacy').addEventListener('click', () => {
     shield.classList.add('hidden');
     sounds.playTap('click');
   });
 
   // Hold to peek
-  const holdTrigger = shield.querySelector('.shield-instruction');
+  const holdTrigger = shield.querySelector('.hold-to-peek');
   const startPeek = () => shield.classList.add('peeking');
   const stopPeek = () => shield.classList.remove('peeking');
-
   holdTrigger.addEventListener('mousedown', startPeek);
   holdTrigger.addEventListener('mouseup', stopPeek);
   holdTrigger.addEventListener('mouseleave', stopPeek);
   holdTrigger.addEventListener('touchstart', (e) => { e.preventDefault(); startPeek(); }, { passive: false });
   holdTrigger.addEventListener('touchend', stopPeek);
 
-  // Undo button
   document.getElementById('btn-undo').addEventListener('click', undo);
 
-  // Sound toggle
-  const btnSound = document.getElementById('btn-sound-toggle');
-  btnSound.addEventListener('click', () => {
-    state.soundEnabled = !state.soundEnabled;
-    document.getElementById('sound-icon').textContent = state.soundEnabled ? '🔊' : '🔇';
-    sounds.playTap('click');
-    saveState();
-  });
-
-  // Language toggle
-  document.getElementById('btn-lang').addEventListener('click', () => {
-    state.lang = state.lang === 'es' ? 'en' : 'es';
-    if (state.players.length === 1 && (state.players[0] === 'Yo' || state.players[0] === 'Me')) {
-      state.players[0] = state.lang === 'es' ? 'Yo' : 'Me';
-    }
-    renderAll();
-    saveState();
-    sounds.playTap('click');
-  });
-
-  // Solve button
   document.getElementById('btn-solve-case').addEventListener('click', () => {
     showAccusationModal();
     sounds.playTap('stamp');
   });
 
+  // Rumor bar: tap a filled slot to clear it
+  document.querySelectorAll('.slot').forEach(slot => {
+    slot.addEventListener('click', () => {
+      if (!state.rumor[slot.dataset.slot]) return;
+      state.rumor[slot.dataset.slot] = null;
+      renderAll();
+      saveState();
+    });
+  });
+  document.getElementById('btn-rumor-log').addEventListener('click', openLogModal);
+  document.getElementById('btn-log').addEventListener('click', openLogModal);
+
+  // Settings
+  document.getElementById('btn-settings').addEventListener('click', () => {
+    renderSettings();
+    openModal('modal-settings');
+  });
+
+  document.getElementById('form-add-player').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = document.getElementById('new-player-input');
+    const name = input.value.trim();
+    if (name && !state.players.includes(name) && state.players.length < maxPlayers()) {
+      state.players.push(name);
+      input.value = '';
+      renderAll();
+      saveState();
+      sounds.playTap('click');
+    }
+  });
+
+  document.getElementById('players-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-remove-player]');
+    const idx = Number(btn?.dataset.removePlayer);
+    if (!btn || idx === 0) return;
+    const [removed] = state.players.splice(idx, 1);
+    // Drop their marks so a card they held is no longer ruled out
+    Object.values(state.marks).forEach(mark => { if (mark.playerMarks) delete mark.playerMarks[removed]; });
+    renderAll();
+    saveState();
+  });
+
+  document.querySelectorAll('[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const oldMe = state.players[0];
+      const wasDefaultMe = oldMe === t('playerMe');
+      state.lang = btn.dataset.lang;
+      if (wasDefaultMe && !state.players.includes(t('playerMe'))) {
+        const newMe = t('playerMe');
+        state.players[0] = newMe;
+        // Marks are keyed by player name, so carry mine over
+        Object.values(state.marks).forEach(mark => {
+          if (mark.playerMarks && oldMe in mark.playerMarks) {
+            mark.playerMarks[newMe] = mark.playerMarks[oldMe];
+            delete mark.playerMarks[oldMe];
+          }
+        });
+      }
+      renderAll();
+      saveState();
+    });
+  });
+
+  document.querySelectorAll('[data-edition]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.edition === 'standard' && state.players.length > MAX_PLAYERS.standard) return;
+      state.edition = btn.dataset.edition;
+      renderAll();
+      saveState();
+    });
+  });
+
+  window.addEventListener('resize', updateLayout);
+
+  document.getElementById('toggle-sound').addEventListener('change', (e) => {
+    state.soundEnabled = e.target.checked;
+    sounds.playTap('click');
+    saveState();
+  });
+
   // New Game / Reset
   document.getElementById('btn-new-game').addEventListener('click', () => {
+    closeModal('modal-settings');
     openModal('modal-reset');
   });
   document.getElementById('btn-confirm-reset').addEventListener('click', () => {
     state.marks = {};
     state.history = [];
     state.turnLogs = [];
+    state.rumor = { suspects: null, rooms: null, weapons: null };
     initDefaultMarks();
     closeModal('modal-reset');
     renderAll();
@@ -619,87 +769,55 @@ function setupEventListeners() {
     sounds.playTap('stamp');
   });
 
-  // Players Modal
-  document.getElementById('btn-players').addEventListener('click', () => {
-    renderPlayersModalList();
-    openModal('modal-players');
-  });
-
-  document.getElementById('btn-add-player').addEventListener('click', () => {
-    const input = document.getElementById('new-player-input');
-    const name = input.value.trim();
-    if (name && !state.players.includes(name)) {
-      state.players.push(name);
-      input.value = '';
-      renderPlayersModalList();
-      renderAll();
-      saveState();
-      sounds.playTap('click');
-    }
-  });
-
-  // Turn Log Modal
-  const openLogModal = () => {
-    populateLogSelects();
-    openModal('modal-log');
-  };
-  document.getElementById('btn-add-log').addEventListener('click', openLogModal);
-  document.getElementById('btn-quick-log').addEventListener('click', openLogModal);
-
+  // Turn log
   document.getElementById('form-log').addEventListener('submit', (e) => {
     e.preventDefault();
     const asker = document.getElementById('log-asker').value;
-    const suspect = document.getElementById('log-suspect').value;
-    const room = document.getElementById('log-room').value;
-    const weapon = document.getElementById('log-weapon').value;
     const responder = document.getElementById('log-responder').value;
     const result = document.getElementById('log-result').value.trim();
+    const cards = CATEGORIES.map(cat => nameOf(findItem(cat, document.getElementById(`log-${cat}`).value)));
 
-    let text = `${asker} preguntó por [${suspect}, ${room}, ${weapon}].`;
-    if (responder === 'Nadie') {
-      text += ` Nadie mostró carta.`;
-    } else {
-      text += ` ${responder} mostró una carta.`;
-    }
+    let text = `${asker} ${t('logAsked')} ${cards.join(', ')}. `;
+    text += responder ? `${responder} ${t('logShowed')}.` : `${t('logNobody')}.`;
     if (result) text += ` (${result})`;
 
     const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
     state.turnLogs.unshift({
       id: Date.now(),
-      time: timeStr,
-      text: text
+      time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+      text
     });
+    state.rumor = { suspects: null, rooms: null, weapons: null };
 
-    closeModal('modal-log');
     document.getElementById('log-result').value = '';
-    renderLogList();
+    closeModal('modal-log');
+    renderAll();
     saveState();
     sounds.playTap('stamp');
   });
 
-  // Generic modal close handlers
-  document.querySelectorAll('[data-close]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const modalId = btn.getAttribute('data-close');
-      closeModal(modalId);
-    });
+  document.getElementById('log-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-delete-log]');
+    if (!btn) return;
+    state.turnLogs.splice(Number(btn.dataset.deleteLog), 1);
+    renderLogList();
+    saveState();
   });
 
-  // Close modals when clicking backdrop
+  // Generic modal close handlers
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close')));
+  });
   document.querySelectorAll('.modal-overlay').forEach(modal => {
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
-      }
+      if (e.target === modal) modal.classList.add('hidden');
     });
   });
 }
 
 function escapeHtml(str) {
   if (!str) return '';
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 // --- 9. Service Worker & Boot ---
@@ -711,10 +829,8 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Init App
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
-  initDefaultMarks();
   setupEventListeners();
   renderAll();
 });

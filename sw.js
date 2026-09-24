@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cluesheet-v1';
+const CACHE_NAME = 'cluesheet-v3';
 const ASSETS = [
   './',
   './index.html',
